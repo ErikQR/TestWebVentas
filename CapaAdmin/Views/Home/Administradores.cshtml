@@ -16,7 +16,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <button type="button" class="btn btn-success">Crear Nuevo</button>
+                <button type="button" class="btn btn-success" onclick="abrirModal(null)">Crear Nuevo</button>
             </div>
         </div>
         <hr />
@@ -27,33 +27,150 @@
                     <th>Apellido</th>
                     <th>Correo</th>
                     <th>Activo</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="exampleModalLabel">Administrador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body g-2">
+
+                <input id="txtId" type="hidden" value="0"/>
+                
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <label for="txtNombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="txtNombre" placeholder="Nombre">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="txtApellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="txtApellido" placeholder="Apellido">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="txtCorreo" class="form-label">Correo</label>
+                        <input type="email" class="form-control" id="txtCorreo" placeholder="ejemplo@ejemplo.com">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="cboActivo" class="form-label">Activo</label>
+                        <select id="cboActivo" class="form-select">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>
+            </div>
+        </div>
     </div>
 </div>
 
 @section scripts{
 
     <script>
-        jQuery.ajax({
-            url: '@Url.Action("ListarAdministradores","Home")'
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8 ",
-            success: function (data) {
-                debugger;
-                var texto1 = "HOLA SOY EL TEXTO 1"
-                console.log(data)
+
+        var tabladata;
+
+
+        tabladata = $("#tabla-admin").DataTable({
+            responsive: true,
+            ordering: false,
+            "ajax": {
+                url: '@Url.Action("ListarAdministradores","Home")',
+                type: "GET",
+                dataType: "json",
+            },
+            "columns": [
+                { "data": "Nombre" },
+                { "data": "Apellido" },
+                { "data": "Correo" },
+                {
+                    "data": "Activo", "render": function (valor) {
+                        if (valor) {
+                            return '<span class="badge bg-success">Si</span>'
+                        } else {
+                            return '<span class="badge bg-danger">No</span>'
+                        }
+                    }
+                },
+                {
+                    "defaultContent": '<button type="button" class="btn btn-primary btn-sm btn-editar"><i class="fas fa-pen me-1"></i></button>' +
+                        '<button type="button" class="btn btn-danger btn-sm ms-2"><i class="fas fa-trash me-1"></i></button>',
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "90px"
+                }
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
             }
 
 
+
+        });
+
+        function abrirModal(json) {
+
+            $("#txtId").val(0);
+            $("#txtNombre").val("");
+            $("#txtApellido").val("");
+            $("#txtCorreo").val("");
+            $("#cboActivo").val(1);
+
+
+            if (json != null) {
+                $("#txtId").val(json.IdAdministrador);
+                $("#txtNombre").val(json.Nombre);
+                $("#txtApellido").val(json.Apellido);
+                $("#txtCorreo").val(json.Correo);
+                $("#cboActivo").val(json.Activo == true ? 1 : 0);
+            }
+
+            $("#formModal").modal("show");
+        }
+
+        $("#tabla-admin tbody").on("click", '.btn-editar', function () {
+
+            var filaSeleccionada = $(this).closest("tr");
+
+            var data = tabladata.row(filaSeleccionada).data();
+
+            console.log(data);
+
+            abrirModal(data);
+
         })
+
+        function Guardar() {
+
+            var Administrador = {
+                
+            }
+
+        }
+
     </script>
 
-    }
+}
 
 

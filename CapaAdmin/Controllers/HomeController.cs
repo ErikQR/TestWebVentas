@@ -32,7 +32,7 @@ namespace CapaAdmin.Controllers
 
             oLista = new CN_Administradores().Listar();
 
-            return Json(oLista,JsonRequestBehavior.AllowGet);
+            return Json(new { data= oLista },JsonRequestBehavior.AllowGet);
         }
 
     }

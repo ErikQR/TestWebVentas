@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Data;
+using System.Web;
 using System.Web.Optimization;
 
 namespace CapaAdmin
@@ -13,7 +14,10 @@ namespace CapaAdmin
 
             bundles.Add(new Bundle("~/bundles/complementos").Include(
                        "~/Scripts/fontawesome/all.min.js",
+                       "~/Scripts/DataTables/jquery.dataTables.min.js",
+                       "~/Scripts/DataTables/dataTables.responsive.min.js",
                        "~/Scripts/scripts.js"));
+            
 
             //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
             //            "~/Scripts/jquery.validate*"));
@@ -26,7 +30,11 @@ namespace CapaAdmin
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.bundle.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                "~/Content/site.css",
+                "~/Content/DataTables/css/jquery.dataTables.min.css",
+                "~/Content/DataTables/css/responsive.dataTables.min.css"
+                ));
         }
     }
 }

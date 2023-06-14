@@ -41,8 +41,8 @@ namespace CapaDatos
                                 );
                         }
                     }
-                    //oconexion.Dispose();
-                    //oconexion.Close();
+                    oconexion.Dispose();
+                    oconexion.Close();
                 }
 
             }
